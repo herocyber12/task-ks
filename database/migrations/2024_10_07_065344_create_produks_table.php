@@ -16,8 +16,10 @@ return new class extends Migration
             $table->string('nama_produk');
             $table->unsignedBigInteger('kategori_id');
             $table->integer('harga');
+            $table->text('deskripsi');
             $table->integer('stok');
             $table->enum('status_produk',['Aktfi','Tidak Aktif']);
+            $table->string('foto_produk');
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('kategori_id')->references('id')->on('kategoris');
