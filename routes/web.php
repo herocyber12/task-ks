@@ -12,8 +12,13 @@ Route::controller(AuthController::class)->group(function(){
     Route::post('/register', 'register')->name('registrasi');
 });
 
-Route::get('/',[HomeController::class,'index'])->name('landing');
-Route::get('/produk/{id}',[HomeController::class,'detail'])->name('detail');
+Route::controller(HomeController::class)->group(function(){
+    Route::get('/','index')->name('landing');
+    Route::get('/produk/{id}','detail')->name('detail');
+    Route::get('/kategori/{id}','index')->name('kategori');
+});
+
+
 // Route::get('/', function () {
 //     return view('pages.auth.login');
 // });

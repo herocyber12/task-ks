@@ -9,11 +9,14 @@ use App\Models\Kategori;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index($id = null)
     {
-        $data = Produk::paginate(16);
+        $data = Produk::with('kategori')->when($id, function ($query) use ($id){
+            $query->where('kategori_id',$id);
+        })->paginate(16);
+        $namaKate = Kategori::where('id',$id)->select('nama_kategori')->first();
         $kategori = Kategori::all();
-        return view('pages.index',compact('data','kategori'));
+        return view('pages.index',compact('data','kategori','namaKate'));
     }
 
     public function detail($id)

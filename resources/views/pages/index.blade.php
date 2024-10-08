@@ -6,7 +6,7 @@
         style="max-height: 100%; height: 80px; background-color: transparent"
     >
         <div class="col-6">
-            <h3>Kategori Nama</h3>
+            <h3>{{request()->routeIs('kategori') ? $namaKate->nama_kategori:'Pilih Kategori'}}</h3>
         </div>
         <div class="col-6">
             <form>
@@ -27,7 +27,7 @@
             <div class="flex-column">
             @foreach ($kategori as $kt )
 
-                <div style="font-size: 32px"> <a href="">{{$kt->nama_kategori}}</a> </div>
+                <div style="font-size: 32px"> <a href="{{route('kategori',['id' => $kt->id])}}">{{$kt->nama_kategori}}</a> </div>
                 @endforeach
             </div>
         </div>

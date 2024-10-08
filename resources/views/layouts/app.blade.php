@@ -68,22 +68,12 @@
                                 class="dropdown-menu"
                                 aria-labelledby="navbarDropdown"
                             >
-                                <li>
-                                    <a class="dropdown-item" href="#">Action</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#"
-                                        >Another action</a
-                                    >
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider" />
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#"
-                                        >Something else here</a
-                                    >
-                                </li>
+                            @foreach (\App\Models\Kategori::all() as $item )
+                            <li>
+                                <a class="dropdown-item" href="{{route('kategori',['id' => $item->id])}}"> {{$item->nama_kategori}} </a>
+                            </li>
+                            @endforeach
+                                
                             </ul>
                         </li>
                         <li class="nav-item">
