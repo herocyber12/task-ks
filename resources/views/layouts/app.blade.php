@@ -18,16 +18,16 @@
         crossorigin="anonymous"
         referrerpolicy="no-referrer"
     />
-    <link href="./asset/style.css" rel="stylesheet" />
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet" />
     @yield('css')
 
     <body>
         <nav
-            class="navbar navbar-expand-lg navbar-light shadow-md position-fixed w-100 top-0"
-        >
+            class="navbar navbar-expand-lg navbar-light shadow-md position-fixed w-100 top-0 shadow"
+            {{-- style="z-index: 99999; background-color:white;" --}}
+            >
             <div class="container">
                 <a class="navbar-brand" href="">
-                    <!--                <img src="{{asset('img/logo.jpg')}}" alt="" width="30" height="24" class="d-inline-block align-text-top">-->
                     [Logo]
                 </a>
                 <button
@@ -88,8 +88,8 @@
                         </li>
                         <li class="nav-item">
                             <a
-                                class="nav-link {{request()->routeIs('paket')?'active' : ''}}"
-                                href="{{route('paket')}}"
+                                class="nav-link {{request()->routeIs('')?'active' : ''}}"
+                                href=""
                                 >Hubungi Kami</a
                             >
                         </li>
@@ -99,7 +99,10 @@
             </div>
         </nav>
 
-        @yield('content')
+        <div style="z-index: 0;">
+
+            @yield('content')
+        </div>
 
         <script
             src="https://code.jquery.com/jquery-3.7.1.min.js"

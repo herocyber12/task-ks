@@ -9,14 +9,14 @@
             <div class="card-body row">
                 <div class="col-xl-5">
                     <img
-                        src="asset/img/WhatsApp Image 2024-10-04 at 10.35.05.jpeg"
+                        src="{{asset('storage/'.$data->foto_produk)}}"
                         class="img-fluid"
                     />
                 </div>
                 <div class="col-xl">
-                    <h4>Nama Produk</h4>
-                    <h3>Rp.1000,000.00</h3>
-                    <p>Deskripsi</p>
+                    <h4>{{$data->nama_produk}}</h4>
+                    <h3>Rp. {{number_format($data->harga),'0','.','.'}}</h3>
+                    <p>{{$data->deskripsi}}</p>
                     <hr />
                     <button class="btn btn-primary">Beli Sekarang</button>
                     <button class="btn btn-danger">Beli Nanti</button>
@@ -28,114 +28,28 @@
             <span style="font-size: 21px; text-decoration: underline"
                 >Poduk Lain</span
             >
+            @foreach ($another as $item )
+                
             <div class="col-xl-2 p-3">
-                <a href="#" style="text-decoration: none">
+                <a href="{{route('detail',['id' => $item->id])}}" style="text-decoration: none">
                     <div class="card shadow">
                         <div class="img-fluid">
                             <img
-                                src="asset/img/WhatsApp Image 2024-10-04 at 10.35.05.jpeg"
+                                src="{{asset('storage/'.$item->foto_produk)}}"
                                 class="img-fluid"
                             />
                             <div class="card-body">
                                 <div class="flex-column">
-                                    <h5>Laptop A409JP</h5>
-                                    <h6>Rp.10000</h6>
+                                    <h5>{{$item->nama_produk}}</h5>
+                                    <h6>Rp. {{number_format($item->harga),'0','.','.'}}</h6>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </a>
             </div>
-            <div class="col-xl-2 p-3">
-                <a href="#" style="text-decoration: none">
-                    <div class="card shadow">
-                        <div class="img-fluid">
-                            <img
-                                src="asset/img/WhatsApp Image 2024-10-04 at 10.35.05.jpeg"
-                                class="img-fluid"
-                            />
-                            <div class="card-body">
-                                <div class="flex-column">
-                                    <h5>Laptop A409JP</h5>
-                                    <h6>Rp.10000</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-xl-2 p-3">
-                <a href="#" style="text-decoration: none">
-                    <div class="card shadow">
-                        <div class="img-fluid">
-                            <img
-                                src="asset/img/WhatsApp Image 2024-10-04 at 10.35.05.jpeg"
-                                class="img-fluid"
-                            />
-                            <div class="card-body">
-                                <div class="flex-column">
-                                    <h5>Laptop A409JP</h5>
-                                    <h6>Rp.10000</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-xl-2 p-3">
-                <a href="#" style="text-decoration: none">
-                    <div class="card shadow">
-                        <div class="img-fluid">
-                            <img
-                                src="asset/img/WhatsApp Image 2024-10-04 at 10.35.05.jpeg"
-                                class="img-fluid"
-                            />
-                            <div class="card-body">
-                                <div class="flex-column">
-                                    <h5>Laptop A409JP</h5>
-                                    <h6>Rp.10000</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-xl-2 p-3">
-                <a href="#" style="text-decoration: none">
-                    <div class="card shadow">
-                        <div class="img-fluid">
-                            <img
-                                src="asset/img/WhatsApp Image 2024-10-04 at 10.35.05.jpeg"
-                                class="img-fluid"
-                            />
-                            <div class="card-body">
-                                <div class="flex-column">
-                                    <h5>Laptop A409JP</h5>
-                                    <h6>Rp.10000</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-xl-2 p-3">
-                <a href="#" style="text-decoration: none">
-                    <div class="card shadow">
-                        <div class="img-fluid">
-                            <img
-                                src="asset/img/WhatsApp Image 2024-10-04 at 10.35.05.jpeg"
-                                class="img-fluid"
-                            />
-                            <div class="card-body">
-                                <div class="flex-column">
-                                    <h5>Laptop A409JP</h5>
-                                    <h6>Rp.10000</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+            @endforeach
+            
         </div>
     </div>
 </div>

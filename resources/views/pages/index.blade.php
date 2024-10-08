@@ -24,82 +24,44 @@
     <div class="row">
         <div class="col-xl-3 d-block" id="kate">
             <h5><strong>Kategori:</strong></h5>
-            Elektronik
+            <div class="flex-column">
+            @foreach ($kategori as $kt )
+
+                <div style="font-size: 32px"> <a href="">{{$kt->nama_kategori}}</a> </div>
+                @endforeach
+            </div>
         </div>
+        
+        @if ($data)
         <div class="col-xl-9 row">
+        @foreach ($data as $item )
             <div class="col-xl-3 p-3">
-                <a href="#" style="text-decoration: none">
+                <a href="{{route('detail',['id' => $item->id])}}" style="text-decoration: none">
                     <div class="card shadow">
                         <div class="img-fluid">
                             <img
-                                src="asset/img/WhatsApp Image 2024-10-04 at 10.35.05.jpeg"
+                                src="{{asset('storage/'.$item->foto_produk)}}"
                                 class="img-fluid"
                             />
                             <div class="card-body">
                                 <div class="flex-column">
-                                    <h5>Laptop A409JP</h5>
-                                    <h6>Rp.10000</h6>
+                                    <h5> {{$item->nama_produk}} </h5>
+                                    <h6>Rp. {{number_format($item->harga),'0','.','.'}} </h6>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </a>
             </div>
-            <div class="col-xl-3 p-3">
-                <a href="#" style="text-decoration: none">
-                    <div class="card shadow">
-                        <div class="img-fluid">
-                            <img
-                                src="asset/img/WhatsApp Image 2024-10-04 at 10.35.05.jpeg"
-                                class="img-fluid"
-                            />
-                            <div class="card-body">
-                                <div class="flex-column">
-                                    <h5>Laptop A409JP</h5>
-                                    <h6>Rp.10000</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-xl-3 p-3">
-                <a href="#" style="text-decoration: none">
-                    <div class="card shadow">
-                        <div class="img-fluid">
-                            <img
-                                src="asset/img/WhatsApp Image 2024-10-04 at 10.35.05.jpeg"
-                                class="img-fluid"
-                            />
-                            <div class="card-body">
-                                <div class="flex-column">
-                                    <h5>Laptop A409JP</h5>
-                                    <h6>Rp.10000</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-xl-3 p-3">
-                <a href="#" style="text-decoration: none">
-                    <div class="card shadow">
-                        <div class="img-fluid">
-                            <img
-                                src="asset/img/WhatsApp Image 2024-10-04 at 10.35.05.jpeg"
-                                class="img-fluid"
-                            />
-                            <div class="card-body">
-                                <div class="flex-column">
-                                    <h5>Laptop A409JP</h5>
-                                    <h6>Rp.10000</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+            @endforeach
+            {{$data->links()}}
         </div>
+        @else
+        <div class="col-xl-9 my-auto" style="height:1000px;">
+
+            <div class="text-center">Produk Tidak ada</div>
+        </div>
+        @endif
     </div>
 </div>
 
