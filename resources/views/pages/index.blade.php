@@ -25,7 +25,7 @@
         <div class="col-xl-3 d-block" id="kate">
             <h5><strong>Kategori:</strong></h5>
             <div class="flex-column">
-            @foreach ($kategori as $kt )
+                @foreach ($kategori as $kt )
 
                 <div style="font-size: 32px"> <a href="{{route('kategori',['id' => $kt->id])}}">{{$kt->nama_kategori}}</a> </div>
                 @endforeach

@@ -18,6 +18,6 @@ class Produk extends Model
 
     public function keranjang()
     {
-        return $this->hasMany(Produk::class,'produk_id');
+        return $this->hasMany(Keranjang::class,'produk_id');
     }
 }

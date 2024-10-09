@@ -17,9 +17,9 @@ class AuthRepository implements AuthInterface
         $credential = $req->only('email','password');
         if(Auth::attempt($credential))
         {
-            return view('pages.index');
+            return redirect()->route('landing');
         } else {
-            return view('pages.auth.login');
+            return redirect()->to('login');
         }
     }
 

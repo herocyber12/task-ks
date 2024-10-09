@@ -18,8 +18,8 @@
                     <h3>Rp. {{number_format($data->harga),'0','.','.'}}</h3>
                     <p>{{$data->deskripsi}}</p>
                     <hr />
-                    <button class="btn btn-primary">Beli Sekarang</button>
-                    <button class="btn btn-danger">Beli Nanti</button>
+                    <button class="btn btn-primary" onclick="window.location.href='{{route('store.langsung',['id' => $data->id])}}'">Beli Sekarang</button>
+                    <button class="btn btn-danger" onclick="window.location.href='{{route('store.keranjang',['id' => $data->id])}}'">Beli Nanti</button>
                 </div>
             </div>
         </div>
