@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('produk_id');
             $table->unsignedBigInteger('profil_id');
             $table->enum('status',['Sudah Checkout', 'Belum Checkout']);
+            $table->integer('quantity');
             $table->timestamps();
             $table->foreign('produk_id')->references('id')->on('produks');
             $table->foreign('profil_id')->references('id')->on('profils');

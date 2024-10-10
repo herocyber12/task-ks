@@ -49,7 +49,8 @@
                     </li>
                 </ul>
                 @if (auth()->user())
-                <div class="mx-auto">
+                <div class="mx-auto d-flex">
+                    <a href="" class="me-3" style="text-decoration: none; color:black;"> <i class="fa-solid fa-user"></i> </a>
                     <div class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -57,16 +58,10 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <div id="item-keranjang"></div>
-                            {{-- @foreach (\App\Models\Kategori::all() as $item )
-                            <div>
-                                <a class="dropdown-item" href="{{route('kategori',['id' => $item->id])}}">
-                                    {{$item->nama_kategori}}
-                                </a>
-                            </div>
-                            @endforeach --}}
                         </div>
                     </div>
                 </div>
+
                 @else
                 <button class="btn btn-success" onclick="window.location.href='{{url('login')}}'">Login</button>
                 @endif
@@ -77,6 +72,7 @@
     <div style="z-index: 0">@yield('content')</div>
 
 
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js"
         integrity="sha512-6sSYJqDreZRZGkJ3b+YfdhB3MzmuP9R7X1QZ6g5aIXhRvR1Y/N/P47jmnkENm7YL3oqsmI6AK+V6AD99uWDnIw=="
@@ -89,10 +85,9 @@
     <script>
         $(document).ready(function() {
             $.ajax({
-                url: "{{ route('keranjang') }}",
+                url: "{{ url('keranjang') }}",
                 type: "GET",
                 success: function(data) {
-                    
                     var keranjang = data.keranjang;
                     var totalTarif = data.total;
                     var html = "";
@@ -106,7 +101,7 @@
                         html += "<span>" + item.produk.nama_produk + "</span> - ";
                         html += "<span> Rp " + harga + "</span>";
                         
-                        var deleteUrl = "/delete-item-keranjang/" + item.id;
+                        var deleteUrl = "/hapus-pesanan/" + item.id;
                         html += `<span> <a href="${deleteUrl}" class='btn btn-danger btn-sm'> <i class='fa-solid fa-trash-can'></i> </a> </span>`;
                         html += "</li>";
                     });
@@ -115,8 +110,7 @@
                         html += "<li class='dropdown-item'>";
                         html += "<strong>Total: " + totalTarif + "</strong>";
                         html += "</li>";
-                        html += "<li><form action='{{route('store.checkouts')}}' method='post'>";
-                        html += "<input name='_token' value='{{ csrf_token() }}' type='hidden'>";
+                        html += "<li><form action='{{route('detail.pesanan')}}' method='get'>";
                         html += "<button type='submit' class='btn btn-success btn-sm ms-2'>Check Out</button>";
                         html += "</form></li>";
                     }
@@ -135,9 +129,27 @@
 </body>
 
 </html>
+{{-- {{dd(session('snaptoken'))}} --}}
+@if(session('snaptoken'))
+    <script>
+    snap.pay("{{session('snaptoken')}}", {
+        onSuccess: function(result) {
+            console.log('success', result);
+            alert('Pembayaran berhasil!');
+        },
+        onPending: function(result) {
+            console.log('pending', result);
+            alert('Pembayaran pending!');
+        },
+        onError: function(result) {
+            console.log('error', result);
+            alert('Terjadi kesalahan saat pembayaran!');
+        }
+    });
+    </script>
+@endif
 
-
-@if(session('success'))
+    @if(session('success'))
         <script>
             Swal.fire({
                 icon: 'success',

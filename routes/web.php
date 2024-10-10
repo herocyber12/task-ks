@@ -4,7 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Pages\HomeController;
 use App\Http\Controllers\Pages\TransaksiController;
+use App\Http\Controllers\NotifSys\NotificationController;
+use App\Http\Controllers\PaymentController;
 
+Route::post('/midtrans/notifikasi',[NotificationController::class,'receive']);
 Route::controller(AuthController::class)->group(function(){
     Route::get('/login','index');
     Route::get('/registrasi','buat_akun');
@@ -21,14 +24,11 @@ Route::controller(HomeController::class)->group(function(){
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('hapus-pesanan/{id}',[HomeController::class,'delete_keranjang'])->name('delete.item-keranjang');
     Route::controller(TransaksiController::class)->group(function(){
-        Route::get('transaksi/keranjang/{id}','store_keranjang')->name('store.keranjang');
-        Route::get('transaksi/{id}','store_beli_langsung')->name('store.langsung');
-        Route::post('transaksi/checkout','checkouts')->name('store.checkouts');
+        Route::post('transaksi/keranjang/{id}','store_keranjang')->name('store.keranjang');
+        Route::post('transaksi/{id}','store_beli_langsung')->name('store.langsung');
+        Route::get('detail-pesanan','detail_pesanan')->name('detail.pesanan');
+        Route::get('transaksi/checkout','checkouts')->name('store.checkouts');
     });
 });
-
-
-// Route::get('/', function () {
-//     return view('pages.auth.login');
-// });

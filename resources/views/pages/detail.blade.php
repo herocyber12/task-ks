@@ -18,8 +18,26 @@
                     <h3>Rp. {{number_format($data->harga),'0','.','.'}}</h3>
                     <p>{{$data->deskripsi}}</p>
                     <hr />
-                    <button class="btn btn-primary" onclick="window.location.href='{{route('store.langsung',['id' => $data->id])}}'">Beli Sekarang</button>
-                    <button class="btn btn-danger" onclick="window.location.href='{{route('store.keranjang',['id' => $data->id])}}'">Beli Nanti</button>
+                    <form action="" method="post" id="myForm">
+                        @csrf
+                        @if ($data->stok === 0 || $data->stok === 1)
+                            @php
+                                $disabled = 'disabled';
+                            @endphp
+                        @else
+                            @php
+                                $disabled = '';
+                            @endphp
+                        @endif
+                        <div class="input-group mb-3" style="max-width: 100%; width:8em;">
+                            <button type="button" class="sub btn btn-secondary btn-sm">-</button>
+                            <input type="number" value="1" min="1" max="{{$data->stok}}" id="quantity" name="quantity" class="form-control text-center" />
+                            <button type="button" class="add btn btn-secondary btn-sm" {{$disabled}}
+                                >+</button>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-konfirm" value="sekarang" {{$disabled}}>Beli Sekarang</button>
+                        <button type="button" class="btn btn-danger btn-konfirm" value="nanti" {{$disabled}}>Beli Nanti</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -53,5 +71,47 @@
         </div>
     </div>
 </div>
+
+@endsection
+@section('js')
+    <script>
+        $(document).ready(function(){
+            $('.add').click(function () {
+                if($('#quantity').val() >= parseInt('{{$data->stok}}')-1){
+                    $(this).prop('disabled',true);
+                }
+                $(this).prev().val(+$(this).prev().val() + 1);
+            });
+            $('.sub').click(function () {
+                if($('#quantity').val() <= '{{$data->stok}}'){
+                    $('.add').prop('disabled',false);
+                }
+                if ($(this).next().val() > 1) $(this).next().val(+$(this).next().val() - 1);
+            });
+
+            $('.btn-konfirm').click(function (){
+                var url;
+                var state = $(this).val();
+                console.log(state);
+                if(state === 'sekarang')
+                {
+                    url = "{{route('store.langsung',['id' => $data->id])}}";
+                } else if(state === 'nanti'){
+                    url = "{{route('store.keranjang',['id' => $data->id])}}";
+                } else {
+                    alert('terjadi kesalahan');
+                }
+
+                $('#myForm').attr('action',url);
+                $('#myForm').submit();
+            });
+        });
+    </script>
+
+    @if(session('successs'))
+        <script>
+            window.location.href='';
+        </script>
+    @endif
 
 @endsection

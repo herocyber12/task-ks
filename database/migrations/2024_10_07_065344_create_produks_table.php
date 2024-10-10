@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('harga');
             $table->text('deskripsi');
             $table->integer('stok');
-            $table->enum('status_produk',['Aktfi','Tidak Aktif']);
+            $table->enum('status_produk',['Aktif','Tidak Aktif']);
             $table->string('foto_produk');
             $table->timestamps();
             $table->softDeletes();

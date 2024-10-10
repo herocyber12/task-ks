@@ -10,6 +10,8 @@ use App\Interfaces\TransaksiInterface;
 use App\Repository\TransaksiRepository;
 use App\Interfaces\HomeInterface;
 use App\Repository\HomeRepository;
+use App\Interfaces\NotificationInterface;
+use App\Repository\NotificationRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,6 +33,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             HomeInterface::class,
             HomeRepository::class,
+        );
+        
+        $this->app->bind(
+            NotificationInterface::class,
+            NotificationRepository::class,
         );
     }
 

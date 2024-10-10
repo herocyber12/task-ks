@@ -28,4 +28,19 @@ class HomeRepository implements HomeInterface{
         ]);
     }
 
+    public function delete_item_keranjang($id)
+    {
+        $delete = Keranjang::where('id',$id)->delete();
+        if ($delete)
+        {
+            $stats = 'success';
+            $msg = 'Berhasil menghapus item dari keranjang';
+        } else {
+            $stats = 'error';
+            $msg = 'Gagal menghapus item dari keranjang';
+        }
+        return redirect()->back()->with($stats,$msg);
+
+    }
+
 }

@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('transaksi_finals', function (Blueprint $table) {
             $table->id();
+            $table->string('order_id');
             $table->unsignedBigInteger('transaksi_id');
             $table->unsignedBigInteger('keranjang_id');
             $table->enum('status_pembayaran',['Belum Lunas','Lunas']);
+            $table->string('snap_token');
             $table->timestamps();
 
             $table->foreign('transaksi_id')->references('id')->on('transaksis');

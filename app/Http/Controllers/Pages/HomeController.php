@@ -42,4 +42,9 @@ class HomeController extends Controller
     {
         return $this->homeInterface->get_keranjang();
     }
+
+    public function delete_keranjang($id)
+    {
+        return $this->homeInterface->delete_item_keranjang($id);
+    }
 }
