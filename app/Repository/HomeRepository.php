@@ -5,35 +5,32 @@ use App\Interfaces\HomeInterface;
 
 use App\Models\Keranjang;
 use App\Models\Profil;
+use App\Models\Produk;
+use App\Models\Kategori;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Atomescrochus\StringSimilarities\Compare;
+use App\Services\GetKeranjang;
 
 class HomeRepository implements HomeInterface{
+
+    protected $keranjangServices;
+
+    public function __construct(GetKeranjang $keranjangServices)
+    {
+        $this->services = $keranjangServices;
+    }
 
     public function get_keranjang()
     {
 
-        $user = Profil::where('user_id', Auth::user()->id)->first();
-        $keranjang = Keranjang::with('produk')->where('profil_id', $user->id)->whereHas('produk',function ($query){
-            $query->where('deleted_at',NULL);
-        })->where('status', 'Belum Checkout')->get();
-        
-        $hargaArray = $keranjang->pluck('produk.harga')->toArray();
-        $quantityArray = $keranjang->pluck('quantity')->toArray();
-
-        $totalHargaPerItem = array_map(function($harga, $quantity) {
-            return $harga * $quantity;
-        }, $hargaArray, $quantityArray);
-
-        $total = array_sum($totalHargaPerItem);
-        
-        $jumlah_data = $keranjang->count();
-        $transak = $jumlah_data > 0;
+        $keranjangData = $this->services->getKeranjang();
 
         return response()->json([
-            'keranjang' => $keranjang->toArray(),
-            'total' => number_format($total, '0', '.', '.'),
-            'jumlh_data' => $jumlah_data,
-            'transak' => $transak,
+            'keranjang' => $keranjangData['keranjang']->toArray(),
+            'total' => number_format($keranjangData['total'], '0', '.', '.'),
+            'jumlh_data' => $keranjangData['jumlah_data'],
+            'transak' => $keranjangData['transak'],
         ]);
     }
 
@@ -50,6 +47,49 @@ class HomeRepository implements HomeInterface{
         }
         return redirect()->back()->with($stats,$msg);
 
+    }
+
+    public function search_feat(Request $request, $id = null)
+    {
+        if ($request->search) {
+            $rekomendasiProduk = Produk::with('kategori')->get();
+            $compare = new Compare;
+            $produks = [];
+
+            foreach ($rekomendasiProduk as $item) 
+            {
+                $nameSimilarity = $compare->jaroWinkler($request->search, $item->nama_produk);
+                $deskripsiSimilarity = $compare->jaroWinkler($request->search, $item->deskripsi);
+                $kategoriSimilarity = $compare->jaroWinkler($request->search, $item->kategori->nama_kategori ?? '');
+
+                $maxSimilarity = max($nameSimilarity, $deskripsiSimilarity, $kategoriSimilarity);
+
+                if ($maxSimilarity > 0.5) {
+                    $produks[] = [
+                        'produk' => $item,
+                        'similarity' => $maxSimilarity
+                    ];
+                }
+            }
+
+            usort($produks, function($a, $b) {
+                return $b['similarity'] <=> $a['similarity'];
+            });
+
+            $data = $produks;
+            $namaKate = "Pencarian '" . $request->search . "'";
+
+        } else {
+            $data = Produk::with('kategori')->when($id, function ($query) use ($id) {
+                $query->where('kategori_id', $id);
+            })->where('is_active', true)->paginate(16);
+
+            $namaKate = $id ? Kategori::where('id', $id)->select('nama_kategori')->first()->nama_kategori : 'Semua Produk';
+        }
+
+        $kategori = Kategori::all();
+
+        return view('pages.index', compact('data', 'kategori', 'namaKate'));
     }
 
 }

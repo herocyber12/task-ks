@@ -10,12 +10,16 @@ use App\Models\Produk;
 use App\Models\Keranjang;
 use App\Models\Profil;
 use Illuminate\Support\Facades\Auth;
+use App\Services\GetKeranjang;
+
 class TransaksiController extends Controller
 {
     protected $transaksiInterface;
-    public function __construct(TransaksiInterface $transaksiInterface)
+    protected $keranjangServices;
+    public function __construct(TransaksiInterface $transaksiInterface, GetKeranjang $keranjangServices)
     {
         $this->transaksiInterface = $transaksiInterface;
+        $this->services = $keranjangServices;
     }
 
     public function store_keranjang(TransaksiRequest $req,$id)
@@ -35,21 +39,10 @@ class TransaksiController extends Controller
 
     public function detail_pesanan()
     {
-
-        $user = Profil::where('user_id', Auth::user()->id)->first();
-        $keranjang = Keranjang::with('produk')->where('profil_id', $user->id)->whereHas('produk',function ($query){
-            $query->where('deleted_at',NULL);
-        })->where('status', 'Belum Checkout')->get();
+        $keranjangData = $this->services->getKeranjang();
         
-        $hargaArray = $keranjang->pluck('produk.harga')->toArray();
-        $quantityArray = $keranjang->pluck('quantity')->toArray();
-
-        $totalHargaPerItem = array_map(function($harga, $quantity) {
-            return $harga * $quantity;
-        }, $hargaArray, $quantityArray);
-
-        $total = array_sum($totalHargaPerItem);
-
+        $keranjang = $keranjangData['keranjang'];
+        $total = $keranjangData['total'];
         return view('pages.detail_pesanan', compact('keranjang','total'));
     }
 }
