@@ -31,7 +31,7 @@ class ProdukResource extends Resource
         return $form
             ->schema([
                 TextInput::make('nama_produk')->required(),
-                Select::make('kategori_id')->options(Kategori::all()->pluck('nama_kategori','id')),
+                Select::make('kategori_id')->label('Kategori')->options(Kategori::all()->pluck('nama_kategori','id')),
                 TextInput::make('harga')->required(),
                 TextInput::make('stok')->required(),
                 TextArea::make('deskripsi')->required(),
@@ -47,20 +47,31 @@ class ProdukResource extends Resource
                 TextColumn::make('kategori.nama_kategori')
                 ->label('Kategori')->sortable(),
                 TextColumn::make('harga')->sortable(),
-                TextColumn::make('stok')->sortable(),
+                Tables\Columns\TextInputColumn::make('stok')
+                ->label('Stok')->rules(['numeric'])
+                ->sortable(),// Menentukan input numerikl
                 TextColumn::make('deskripsi')->sortable()->limit(50),
                 ImageColumn::make('foto_produk')->sortable()
                 ->disk('public'),
+                Tables\Columns\ToggleColumn::make('is_active')
+                ->label('Aktif')
+                ->sortable()
+                ->onColor('success')
+                ->offColor('danger'),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }
@@ -80,4 +91,12 @@ class ProdukResource extends Resource
             'edit' => Pages\EditProduk::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): Builder
+{
+    return parent::getEloquentQuery()
+        ->withoutGlobalScopes([
+            SoftDeletingScope::class,
+        ]);
+}
 }

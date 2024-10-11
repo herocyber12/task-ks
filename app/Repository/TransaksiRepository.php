@@ -108,7 +108,9 @@ class TransaksiRepository implements TransaksiInterface{
         DB::beginTransaction();
         try {
             $profil = Profil::where('user_id',Auth::user()->id)->first();
-            $keranjang = Keranjang::with('produk')->where('profil_id',$profil->id)->where('status','Belum Checkout')->get();
+            $keranjang = Keranjang::with('produk')->where('profil_id',$profil->id)->whereHas('produk',function ($query) {
+                $query->where('deleted_at',null);
+            })->where('status','Belum Checkout')->get();
             
             $hargaArray = $keranjang->pluck('produk.harga')->toArray();
             $total = array_sum($hargaArray);
@@ -168,15 +170,13 @@ class TransaksiRepository implements TransaksiInterface{
                 ]);
             }
             DB::commit();
-            $stats = 'success';
-            $msg = 'Berhasil Melakukan Checkout';
+            $stats = 'snaptoken';
+            $msg = $snapToken;
         } catch (\Throwable $th) {
             DB::rollback();
             $stats = 'error';
             $msg = $th->getMessage();
         }
-
-        Session::flash('snaptoken', $snapToken);
         return redirect()->back()->with($stats,$msg);
     }
 }

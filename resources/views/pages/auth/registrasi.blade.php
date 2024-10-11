@@ -31,32 +31,47 @@
                                 <div class="alert alert-danger"> {{session('error')}} </div>
                             @endif
                             @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-                            <form action="{{route('registrasi')}}" method="post" class="pt-5">
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            <form action="{{route('registrasi')}}" method="post" class="pt-3">
                                 @csrf
                                 <div class="mb-3">
                                     <label for="name">Nama</label>
-                                    <input type="text" name="name" class="form-control" id="name" placeholder="masukan password" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="email">Email</label>
-                                    <input type="email" name="email" class="form-control" id="email" placeholder="example@google.com" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="password">Password</label>
-                                    <input type="password" name="password" class="form-control" id="password" placeholder="masukan password" minlength="8" required>
+                                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror " id="name" placeholder="masukan nama" required>
+                                    @error('name')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                     @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email">Email</label>
+                                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" placeholder="example@google.com" required>
+                                        @error('email')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                         @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="password">Password</label>
+                                            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="password" placeholder="masukan password" minlength="8" required>
+                                            @error('password')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                             @enderror
                                 </div>
                                 
                                 <button type="submit" class="btn btn-success col-xl-12">Buat</button>
                                 <hr>
-                                <p>Sudah Punya Akun ? <a href="#">Masuk</a></p>
+                                <p class="text-center">Sudah Punya Akun ? <a href="{{route('login.form')}}">Masuk</a></p>
                             </form>
                         </div>
                     </div>

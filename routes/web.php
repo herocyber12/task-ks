@@ -4,12 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Pages\HomeController;
 use App\Http\Controllers\Pages\TransaksiController;
+use App\Http\Controllers\Pages\ProfilController;
 use App\Http\Controllers\NotifSys\NotificationController;
 use App\Http\Controllers\PaymentController;
 
 Route::post('/midtrans/notifikasi',[NotificationController::class,'receive']);
 Route::controller(AuthController::class)->group(function(){
-    Route::get('/login','index');
+    Route::get('/login','index')->name('login.form');
     Route::get('/registrasi','buat_akun');
     Route::get('/logout','logout');
     Route::post('/login', 'login')->name('login');
@@ -19,6 +20,7 @@ Route::controller(AuthController::class)->group(function(){
 Route::controller(HomeController::class)->group(function(){
     Route::get('/','index')->name('landing');
     Route::get('/keranjang','keranjang')->name('keranjang');
+    Route::get('/search','search')->name('search');
     Route::get('/produk/{id}','detail')->name('detail');
     Route::get('/kategori/{id}','index')->name('kategori');
 });
@@ -30,5 +32,10 @@ Route::middleware('auth')->group(function () {
         Route::post('transaksi/{id}','store_beli_langsung')->name('store.langsung');
         Route::get('detail-pesanan','detail_pesanan')->name('detail.pesanan');
         Route::get('transaksi/checkout','checkouts')->name('store.checkouts');
+    });
+    Route::controller(ProfilController::class)->group(function(){
+        Route::get('profil','index')->name('profil');
+        Route::put('update-profil','update')->name('update');
+        Route::get('riwayat-pembelian','riwayat');
     });
 });

@@ -14,15 +14,15 @@ return new class extends Migration
         Schema::create('produks', function (Blueprint $table) {
             $table->id();
             $table->string('nama_produk');
-            $table->unsignedBigInteger('kategori_id');
+            $table->unsignedBigInteger('kategori_id')->nullable();
             $table->integer('harga');
             $table->text('deskripsi');
             $table->integer('stok');
-            $table->enum('status_produk',['Aktif','Tidak Aktif']);
+            $table->boolean('is_active')->default(true);
             $table->string('foto_produk');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('kategori_id')->references('id')->on('kategoris');
+            $table->foreign('kategori_id')->references('id')->on('kategoris')->onUpdate('NO ACTION')->onDelete('SET NULL');
         });
     }
 

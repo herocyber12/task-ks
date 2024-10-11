@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('keranjangs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('produk_id');
+            $table->unsignedBigInteger('produk_id')->nullable();
             $table->unsignedBigInteger('profil_id');
             $table->enum('status',['Sudah Checkout', 'Belum Checkout']);
             $table->integer('quantity');
             $table->timestamps();
-            $table->foreign('produk_id')->references('id')->on('produks');
+            $table->foreign('produk_id')->references('id')->on('produks')->onUpdate('NO ACTION')->onDelete('SET NULL');
             $table->foreign('profil_id')->references('id')->on('profils');
         });
     }

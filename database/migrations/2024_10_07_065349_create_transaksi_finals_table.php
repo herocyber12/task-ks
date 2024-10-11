@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('order_id');
             $table->unsignedBigInteger('transaksi_id');
             $table->unsignedBigInteger('keranjang_id');
-            $table->enum('status_pembayaran',['Belum Lunas','Lunas']);
+            $table->enum('status_pembayaran',['Belum Lunas','Lunas','Pending','Transaksi Kadaluarsa','Transaksi Dibatalkan']);
             $table->string('snap_token');
             $table->timestamps();
 

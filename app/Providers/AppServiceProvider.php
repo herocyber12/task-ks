@@ -12,6 +12,8 @@ use App\Interfaces\HomeInterface;
 use App\Repository\HomeRepository;
 use App\Interfaces\NotificationInterface;
 use App\Repository\NotificationRepository;
+use App\Interfaces\ProfilInterface;
+use App\Repository\ProfilRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,6 +40,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             NotificationInterface::class,
             NotificationRepository::class,
+        );
+
+        $this->app->bind(
+            ProfilInterface::class,
+            ProfilRepository::class,
         );
     }
 

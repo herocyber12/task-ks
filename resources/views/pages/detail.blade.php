@@ -20,19 +20,13 @@
                     <hr />
                     <form action="" method="post" id="myForm">
                         @csrf
-                        @if ($data->stok === 0 || $data->stok === 1)
-                            @php
-                                $disabled = 'disabled';
-                            @endphp
-                        @else
-                            @php
-                                $disabled = '';
-                            @endphp
-                        @endif
+                        @php
+                            $disabled = ($data->stok === 0 || !$data->is_active || !is_null($data->deleted_at)) ? 'disabled' : '';
+                        @endphp
                         <div class="input-group mb-3" style="max-width: 100%; width:8em;">
                             <button type="button" class="sub btn btn-secondary btn-sm">-</button>
                             <input type="number" value="1" min="1" max="{{$data->stok}}" id="quantity" name="quantity" class="form-control text-center" />
-                            <button type="button" class="add btn btn-secondary btn-sm" {{$disabled}}
+                            <button type="button" class="add btn btn-secondary btn-sm" {{$disabled}} {{$data->stok === 1? 'disabled' : ''}}
                                 >+</button>
                         </div>
                         <button type="button" class="btn btn-primary btn-konfirm" value="sekarang" {{$disabled}}>Beli Sekarang</button>

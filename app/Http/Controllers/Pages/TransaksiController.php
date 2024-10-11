@@ -37,10 +37,18 @@ class TransaksiController extends Controller
     {
 
         $user = Profil::where('user_id', Auth::user()->id)->first();
-        $keranjang = Keranjang::with('produk')->where('profil_id', $user->id)->where('status', 'Belum Checkout')->get();
+        $keranjang = Keranjang::with('produk')->where('profil_id', $user->id)->whereHas('produk',function ($query){
+            $query->where('deleted_at',NULL);
+        })->where('status', 'Belum Checkout')->get();
         
         $hargaArray = $keranjang->pluck('produk.harga')->toArray();
-        $total = array_sum($hargaArray);
+        $quantityArray = $keranjang->pluck('quantity')->toArray();
+
+        $totalHargaPerItem = array_map(function($harga, $quantity) {
+            return $harga * $quantity;
+        }, $hargaArray, $quantityArray);
+
+        $total = array_sum($totalHargaPerItem);
 
         return view('pages.detail_pesanan', compact('keranjang','total'));
     }

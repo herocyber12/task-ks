@@ -30,20 +30,36 @@
                             @if (session('success'))
                                 <div class="alert alert-success"> {{session('success')}} </div>
                             @endif
-                            <form action="{{route('login')}}" method="post" class="pt-5">
+                            @if (session('error'))
+                                <div class="alert alert-danger"> {{session('error')}} </div>
+                            @endif
+                            <form action="{{route('login')}}" method="post" class="pt-3">
                                 @csrf
                                 <div class="mb-3">
                                     <label for="email">Email</label>
-                                    <input type="email" name="email" class="form-control" id="email" placeholder="example@google.com">
+                                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" placeholder="example@google.com" value="{{ old('email') }}" required>
+                                    @error('email')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
+                            
                                 <div class="mb-3">
                                     <label for="password">Password</label>
-                                    <input type="password" name="password" class="form-control" id="password" placeholder="masukan password">
+                                    <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="password" placeholder="Masukkan password" required>
+                                    @error('password')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
+                            
                                 <button type="submit" class="btn btn-success col-xl-12">Login</button>
                                 <hr>
-                                <p class="text-center">Belum punya akun? <a href="{{url('registrasi')}}">Buat Akun</a> </p>
+                                <p class="text-center">Belum punya akun? <a href="{{url('registrasi')}}">Buat Akun</a></p>
                             </form>
+                            
                         </div>
                     </div>
                 </div>

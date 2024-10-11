@@ -11,13 +11,22 @@ class HomeRepository implements HomeInterface{
 
     public function get_keranjang()
     {
+
         $user = Profil::where('user_id', Auth::user()->id)->first();
-        $keranjang = Keranjang::with('produk')->where('profil_id', $user->id)->where('status', 'Belum Checkout')->get();
-        $jumlah_data = $keranjang->count();
+        $keranjang = Keranjang::with('produk')->where('profil_id', $user->id)->whereHas('produk',function ($query){
+            $query->where('deleted_at',NULL);
+        })->where('status', 'Belum Checkout')->get();
         
         $hargaArray = $keranjang->pluck('produk.harga')->toArray();
-        $total = array_sum($hargaArray);
+        $quantityArray = $keranjang->pluck('quantity')->toArray();
 
+        $totalHargaPerItem = array_map(function($harga, $quantity) {
+            return $harga * $quantity;
+        }, $hargaArray, $quantityArray);
+
+        $total = array_sum($totalHargaPerItem);
+        
+        $jumlah_data = $keranjang->count();
         $transak = $jumlah_data > 0;
 
         return response()->json([

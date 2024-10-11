@@ -19,7 +19,7 @@ class AuthRepository implements AuthInterface
         {
             return redirect()->route('landing');
         } else {
-            return redirect()->to('login');
+            return redirect()->back()->with('error','email atau password anda salah');
         }
     }
 
@@ -41,7 +41,7 @@ class AuthRepository implements AuthInterface
             DB::commit();
             $route = 'login';
             $stats = 'success';
-            $message = 'Verhasil membuat akun';
+            $message = 'Berhasil membuat akun';
         } catch (\Throwable $th) {
             DB::rollBack();
             $route = 'registrasi';
@@ -55,6 +55,6 @@ class AuthRepository implements AuthInterface
     public function logout()
     {
         Auth::logout();
-        return view('pages.index');
+        return redirect()->route('landing');
     }
 }

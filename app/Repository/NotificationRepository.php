@@ -17,9 +17,10 @@ class NotificationRepository implements NotificationInterface{
             return response()->json(['stats' => false,'message' => 'Invalid Signature'], 403);
         }
 
+        $order_id = $callbacknotif->getNotification()->order_id;
+        $transaksi = TransaksiFinal::with('keranjang.produk')->where('order_id',$order_id)->get();
+
         if($callbacknotif->isSuccess()){
-            $order_id = $callbacknotif->getNotification()->order_id;
-            $transaksi = TransaksiFinal::with('keranjang.produk')->where('order_id',$order_id)->get();
             $stokUpdate = [];
             
             foreach($transaksi as $trx){
@@ -40,14 +41,37 @@ class NotificationRepository implements NotificationInterface{
                     'stok' => $stokFinal,
                 ];
                 if($stokFinal < 0){
-                    $data['status_produk'] = 'Tidak Aktif';
+                    $data['is_active'] = false;
                 }
 
                 $update = Produk::where('id', $item['id'])->update($data);
             }
         }
 
-        Session::flash('successs',true);
+        if($callbacknotif->isPending())
+        {
+            foreach($transaksi as $trx){
+                $trx->status_pembayaran = 'Pending';
+                $trx->save();
+            }
+        }
+
+        if($callbacknotif->isExpire())
+        {
+            foreach($transaksi as $trx){
+                $trx->status_pembayaran = 'Transaksi Kadaluarsa';
+                $trx->save();
+            }
+        }
+        
+        if($callbacknotif->isCancelled())
+        {
+            foreach($transaksi as $trx){
+                $trx->status_pembayaran = 'Transaksi Dibatalkan';
+                $trx->save();
+            }
+            
+        }
         
         return response()->json([
             'stats' => true,

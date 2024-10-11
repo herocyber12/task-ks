@@ -74,6 +74,11 @@ class CallBackNotif extends Midtrans{
         return ($this->notification->transaction_status == 'cancel');
     }
 
+    public function isPending()
+    {
+        return ($this->notification->transaction_status == 'pending');
+    }
+
     public function getNotification()
     {
         return $this->notification;

@@ -13,7 +13,7 @@ class TransaksiFinal extends Model
 
     public function transaksi()
     {
-        return $this->belongsTo(Transaksi::class,'transaski_id');
+        return $this->belongsTo(Transaksi::class,'transaksi_id');
     }
     public function keranjang()
     {

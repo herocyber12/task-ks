@@ -27,7 +27,6 @@ class AuthRequest extends FormRequest
             'email' => 'required|email',
             'password' => 'required|min:8', 
             'name' => request()->routeIs('registrasi') ?  'required|string' : '', 
-
         ];
     }
 
@@ -38,8 +37,8 @@ class AuthRequest extends FormRequest
             'email.email' => 'Kolom email harus menggunakan @',
             'password.min' => 'Minimal Password 8 Karakter',
             'password.required' => 'Kolom Password Wajib Diisi',
-            'nama.required' => 'Kolom Nama Wajib Diisi',
-            'nama.string' => 'Nama harus berupa huruf'
+            'name.required' => 'Kolom Nama Wajib Diisi',
+            'name.string' => 'Nama harus berupa huruf'
         ];
     }
 }
