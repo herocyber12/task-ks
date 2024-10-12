@@ -29,7 +29,7 @@
                             <td>Rp. {{number_format($item->keranjang->produk->harga, '0',',',',')}}</td>
                             <td>
                                 @if ($item->status_pembayaran == 'Pending')
-                                <button class="btn badge bg-warning rounded-pill text-white" data-id="{{$item->id}}" value="{{$item->snap_token}}"> Pending </button>
+                                <button class="btn badge bg-warning rounded-pill text-white bayarId" data-id="{{$item->id}}" value="{{$item->snap_token}}"> Pending </button>
                                 @elseif ($item->status_pembayaran == 'Lunas')
                                 <div class="badge bg-success rounded-pill text-white"> Lunas </div>
                                 @elseif ($item->status_pembayaran == 'Belum Lunas')
