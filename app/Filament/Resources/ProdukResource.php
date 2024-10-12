@@ -44,6 +44,7 @@ class ProdukResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')->sortable(),
+                TextColumn::make('nama_produk')->sortable(),
                 TextColumn::make('kategori.nama_kategori')
                 ->label('Kategori')->sortable(),
                 TextColumn::make('harga')->sortable(),
