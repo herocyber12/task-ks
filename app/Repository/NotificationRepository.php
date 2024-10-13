@@ -39,10 +39,11 @@ class NotificationRepository implements NotificationInterface{
                 $stokFinal = $stokSekarang < 0 ? 0 : $stokSekarang;
                 $data = [
                     'stok' => $stokFinal,
+                    'is_active' => $stokFinal === 0 ? 0 : 1,
                 ];
-                if($stokFinal < 0){
-                    $data['is_active'] = false;
-                }
+                // if($stokFinal < 0){
+                //     $data['is_active'] = 0;
+                // }
 
                 $update = Produk::where('id', $item['id'])->update($data);
             }
